@@ -1,0 +1,23 @@
+{
+  "name": "Hotel Paradise",
+  "short_name": "Hotel Paradise",
+  "description": "Sistema de gestión hotelera para control de limpieza e incidencias",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#3b82f6",
+  "orientation": "portrait-primary",
+  "scope": "./",
+  "icons": [
+    {
+      "src": "./logo.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": ["productivity", "business"],
+  "lang": "es-MX",
+  "dir": "ltr",
+  "prefer_related_applications": false
+}

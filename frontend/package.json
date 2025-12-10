@@ -1,0 +1,45 @@
+{
+  "name": "frontend",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "build:gh-pages": "npm run build && npm run copy-pwa-files",
+    "copy-pwa-files": "node -e \"require('fs').copyFileSync('public/sw.js', 'dist/sw.js'); require('fs').copyFileSync('public/manifest.json', 'dist/manifest.json'); require('fs').copyFileSync('public/404.html', 'dist/404.html'); require('fs').copyFileSync('public/.nojekyll', 'dist/.nojekyll');\"",
+    "lint": "eslint .",
+    "preview": "vite preview",
+    "predeploy": "npm run build:gh-pages",
+    "deploy": "gh-pages -d dist"
+  },
+  "dependencies": {
+    "@tailwindcss/vite": "^4.1.17",
+    "axios": "^1.13.2",
+    "firebase": "^12.6.0",
+    "formik": "^2.4.9",
+    "html5-qrcode": "^2.3.8",
+    "lucide-react": "^0.555.0",
+    "pouchdb": "^8.0.1",
+    "pouchdb-find": "^8.0.1",
+    "qrcode.react": "^4.2.0",
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0",
+    "react-router-dom": "^7.9.6",
+    "sweetalert2": "^11.26.3",
+    "tailwindcss": "^4.1.17",
+    "yup": "^1.7.1"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.39.1",
+    "@types/react": "^19.2.5",
+    "@types/react-dom": "^19.2.3",
+    "@vitejs/plugin-react": "^5.1.1",
+    "eslint": "^9.39.1",
+    "eslint-plugin-react-hooks": "^7.0.1",
+    "eslint-plugin-react-refresh": "^0.4.24",
+    "gh-pages": "^6.3.0",
+    "globals": "^16.5.0",
+    "vite": "^7.2.4"
+  }
+}

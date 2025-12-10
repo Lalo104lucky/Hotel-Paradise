@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8" />
+  <link rel="icon" type="image/svg+xml" href="./logo.svg" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <!-- PWA Meta Tags -->
+  <meta name="theme-color" content="#3b82f6" />
+  <meta name="description" content="Sistema de Gestión Hotelera - Limpieza e Incidencias" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="Hotel Manager" />
+
+  <!-- PWA Manifest -->
+  <link rel="manifest" href="./manifest.json" />
+
+  <title>Hotel Paradise</title>
+
+  <!-- PouchDB desde CDN para evitar problemas con Vite -->
+  <script src="https://cdn.jsdelivr.net/npm/pouchdb@9.0.0/dist/pouchdb.min.js"></script>
+</head>
+
+<body>
+  <div id="root"></div>
+
+  <!-- SPA Redirect Handler for GitHub Pages -->
+  <script>
+    (function () {
+      var redirect = sessionStorage.getItem('redirect');
+      sessionStorage.removeItem('redirect');
+      if (redirect && redirect !== location.href) {
+        history.replaceState(null, null, redirect);
+      }
+    })();
+  </script>
+
+  <script type="module" src="/src/main.jsx"></script>
+
+  <!-- Service Worker Registration (PWA + Firebase) -->
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/sw.js')
+          .then(registration => {
+            console.log('[SW] Service Worker registrado:', registration.scope);
+
+            // Detectar actualizaciones
+            registration.addEventListener('updatefound', () => {
+              const newWorker = registration.installing;
+              newWorker.addEventListener('statechange', () => {
+                if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
+                  console.log('[SW] Nueva versión disponible');
+                }
+              });
+            });
+          })
+          .catch(error => {
+            console.error('[SW] Error al registrar Service Worker:', error);
+          });
+      });
+    }
+  </script>
+</body>
+
+</html>
