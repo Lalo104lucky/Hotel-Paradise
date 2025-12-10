@@ -2,7 +2,7 @@ import axios from 'axios';
 import { alertaError } from '../context/alerts';
 const ENV = import.meta.env;
 
-const SERVER_URL = `http://${ENV.VITE_API_HOST}:${ENV.VITE_API_PORT}${ENV.VITE_API_BASE}`;
+const SERVER_URL = `${ENV.VITE_API_PROTOCOL}://${ENV.VITE_API_HOST}:${ENV.VITE_API_PORT}${ENV.VITE_API_BASE}`;
 
 const AxiosClient = axios.create({
     baseURL: SERVER_URL,

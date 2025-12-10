@@ -1,0 +1,70 @@
+services:
+  database:
+    image: mysql:8
+    container_name: hotels-database
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: hoteles
+    ports:
+      - "3307:3306"
+    networks:
+      - hotels-net
+    volumes:
+      - hotels-volume:/var/lib/mysql
+
+  frontend:
+    image: frontend:v1.0
+    build:
+      context: ./frontend
+      args:
+        API_HOST: localhost
+        API_PORT: 8081
+        API_BASE: /
+        API_PROTOCOL: https
+    container_name: hotels-frontend 
+    ports:
+      - "3080:80"
+      - "3000:443" 
+    networks:
+      - hotels-net
+    volumes:
+      - certbot-conf:/etc/letsencrypt:ro 
+    depends_on:
+      - database    
+
+  backend:
+    image: server:v1.0
+    build:
+      context: ./backend
+    environment:
+      SERVER_PORT: 8080
+      DB_HOST: database 
+      DB_PORT: 3306
+      DB_NAME: hoteles
+      DB_USER: root
+      DB_PASS: root
+      SERVER_SSL_ENABLED: true
+      SERVER_SSL_KEYSTORE : /etc/letsencrypt/live/localhost/keystore.p12
+      SERVER_SSL_KEYSTORE_PASS: changeit
+    ports:
+      - "8081:8080"
+    container_name: hotels-backend
+    networks:
+      - hotels-net
+    volumes:
+      - certbot-conf:/etc/letsencrypt:ro # CORREGIDO: "cetbot-conf" ahora es "certbot-conf"
+    depends_on:
+      - frontend  
+# Aqui se configuran las redes donde se comunican los contenedores
+# docker network create --driver bridge sgu-net
+networks:
+  hotels-net:
+    external: true
+
+# Aqui se configuran los volumenes que ocupan los contenedores
+# docker volume create sgu-volume
+volumes:
+  hotels-volume:
+    external: true
+  certbot-conf:
+    external: true
