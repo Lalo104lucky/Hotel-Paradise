@@ -99,7 +99,7 @@ const SignIn = () => {
                             <div className="w-24 h-24 bg-white rounded-2xl shadow-lg p-3 mb-4">
                                 <img src="/imgs/logo.svg" alt="Logo" className="w-full h-full object-contain" />
                             </div>
-                            <h1 className="text-3xl font-bold text-black mb-2">Bienvenido</h1>
+                            <h1 className="text-3xl font-bold text-black mb-2">Hola papirrin :v</h1>
                             <p className="text-gray-800 text-sm">Inicia sesión para continuar</p>
                         </div>
                     </div>
