@@ -8,7 +8,7 @@ pipeline {
         // Parar los servicios que ya existen o en todo caso hacer caso omiso
         stage('Parando los servicios...') {
             steps {
-                bat '''
+                sh '''
                     docker compose -p hotel-paradise down || exit /b 0
                 '''
             }
@@ -17,7 +17,7 @@ pipeline {
         // Eliminar las imágenes creadas por ese proyecto
         stage('Eliminando imágenes anteriores...') {
             steps {
-                bat '''
+                sh '''
                     for /f "tokens=*" %%i in ('docker images --filter "label=com.docker.compose.project=hotel-paradise" -q') do (
                         docker rmi -f %%i
                     )
@@ -40,7 +40,7 @@ pipeline {
         // Construir y levantar los servicios
         stage('Construyendo y desplegando servicios...') {
             steps {
-                bat '''
+                sh '''
                     docker compose up --build -d
                 '''
             }
