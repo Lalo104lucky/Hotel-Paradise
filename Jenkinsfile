@@ -1,5 +1,8 @@
 pipeline {
     agent any
+    environment {
+	PATH = "/usr/bin:${env.PATH}"
+    }
 
     stages {
         // Parar los servicios que ya existen o en todo caso hacer caso omiso
