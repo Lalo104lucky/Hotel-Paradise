@@ -1,47 +1,48 @@
 pipeline {
     agent any
+
     environment {
-	PATH = "/usr/bin:${env.PATH}"
+        PATH = "/usr/local/bin:${env.PATH}"
     }
 
     stages {
-        // Parar los servicios que ya existen o en todo caso hacer caso omiso
-        stage('Parando los servicios...') {
+        stage('Stopping services') {
             steps {
                 sh '''
-                    docker compose -p hotel-paradise down || exit /b 0
+                    docker compose -p hotel-paradise down || true
                 '''
             }
         }
 
-        // Eliminar las imágenes creadas por ese proyecto
-        stage('Eliminando imágenes anteriores...') {
-            steps {
+        stage('Deleting old images') {
+            steps{
                 sh '''
-                    for /f "tokens=*" %%i in ('docker images --filter "label=com.docker.compose.project=hotel-paradise" -q') do (
-                        docker rmi -f %%i
-                    )
-                    if errorlevel 1 (
-                        echo No hay imagenes por eliminar
-                    ) else (
-                        echo Imagenes eliminadas correctamente
-                    )
+                    IMAGES=$(docker images --filter "label=com.docker.compose.project=hotel-paradise" -q)
+                    if [ -n "$IMAGES" ]; then
+                        docker rmi -f $IMAGES
+                    fi
                 '''
             }
         }
 
-        // Del recurso SCM configurado en el job, jala el repo
-        stage('Obteniendo actualización...') {
+        stage('Pulling update') {
             steps {
                 checkout scm
             }
         }
 
-        // Construir y levantar los servicios
-        stage('Construyendo y desplegando servicios...') {
+        stage('Building new images') {
             steps {
                 sh '''
-                    docker compose up --build -d
+                    docker compose build --no-cache
+                '''
+            }
+        }
+
+        stage('Deploying containers') {
+            steps {
+                sh '''
+                    docker compose up -d
                 '''
             }
         }
@@ -49,16 +50,11 @@ pipeline {
 
     post {
         success {
-            echo 'Pipeline ejecutado con éxito'
+            echo 'Pipeline executed successfully.'
         }
 
         failure {
-            echo 'Hubo un error al ejecutar el pipeline'
-        }
-
-        always {
-            echo 'Pipeline finalizado'
+            echo 'An error occurred during pipeline execution, check the logs of the stage for mor information.'
         }
     }
 }
-
