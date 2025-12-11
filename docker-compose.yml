@@ -6,7 +6,7 @@ services:
       MYSQL_ROOT_PASSWORD: root
       MYSQL_DATABASE: hoteles
     ports:
-      - "3307:3306"
+      - "3306:3306"
     networks:
       - hotels-net
     volumes:
@@ -17,7 +17,7 @@ services:
     build:
       context: ./frontend
       args:
-        API_HOST: localhost
+        API_HOST: 23.21.251.77
         API_PORT: 8081
         API_BASE: /
         API_PROTOCOL: https
