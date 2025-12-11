@@ -20,15 +20,12 @@ services:
         API_HOST: 23.21.251.77
         API_PORT: 8081
         API_BASE: /
-        API_PROTOCOL: https
+        API_PROTOCOL: http
     container_name: hotels-frontend 
     ports:
-      - "3080:80"
-      - "3000:443" 
+      - "3000:80" 
     networks:
       - hotels-net
-    volumes:
-      - certbot-conf:/etc/letsencrypt:ro 
     depends_on:
       - database    
 
@@ -43,7 +40,7 @@ services:
       DB_NAME: hoteles
       DB_USER: root
       DB_PASS: root
-      SERVER_SSL_ENABLED: true
+      SERVER_SSL_ENABLED: false
       SERVER_SSL_KEYSTORE : /etc/letsencrypt/live/localhost/keystore.p12
       SERVER_SSL_KEYSTORE_PASS: changeit
     ports:
@@ -51,8 +48,6 @@ services:
     container_name: hotels-backend
     networks:
       - hotels-net
-    volumes:
-      - certbot-conf:/etc/letsencrypt:ro # CORREGIDO: "cetbot-conf" ahora es "certbot-conf"
     depends_on:
       - frontend  
 # Aqui se configuran las redes donde se comunican los contenedores
@@ -66,5 +61,4 @@ networks:
 volumes:
   hotels-volume:
     external: true
-  certbot-conf:
-    external: true
+
